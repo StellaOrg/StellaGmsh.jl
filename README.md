@@ -4,17 +4,6 @@
 
 StellaGmsh.jl wraps Gmsh.jl with a small set of composable geometry builders, boolean operations, and a tidy `do`-block workflow that handles Gmsh initialisation and shutdown for you.
 
-## Highlights
-
-* **Clean lifecycle** with `with_gmsh do ... end` that initialises, names, and finalises the Gmsh model automatically.
-* **Composable transforms** with `Pos` and `Rot`, using `*` to chain operations right-to-left (matrix style).
-* **Boolean CSG ops** using Julia operators: `+` fuse, `-` cut.
-* **GeometryBasics integration**: `mesh(...)` returns a `GeometryBasics.Mesh` for easy downstream use.
-* **Quick inspect**: `plot()` opens the Gmsh FLTK GUI.
-* **Export**: `write("file.stl")` or pass `file=` to `mesh(...)` to save immediately.
-
-> Note: At present the mesh conversion targets **2D triangular elements**. See Limitations.
-
 ---
 
 ## Installation
