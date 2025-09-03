@@ -7,8 +7,9 @@ export Pos, Rot
 
 
 # Internal imports
-using Accessors
+using Accessors: @set
 using ArgCheck: @argcheck
+using Unrolled: unrolled_map, unrolled_foreach
 import GeometryBasics
 import Gmsh: gmsh
 

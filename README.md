@@ -113,8 +113,8 @@ Rectangle(origin::Tuple, extents::Tuple; tag=-1, roundedRadius=0.0)
 
 ```julia
 Pos(x=0.0, y=0.0, z=0.0)
-Rot(ax::NTuple{3,Float64}, angle::Float64)                      # rotate about geometry centre
-Rot(x::NTuple{3,Float64}, ax::NTuple{3,Float64}, angle::Float64) # rotate about point x
+Rot(ax::NTuple{3,Float64}, angle::Float64)                          # rotate about geometry centre
+Rot(x::NTuple{3,Float64}, ax::NTuple{3,Float64}, angle::Float64)    # rotate about point x
 ```
 
 Chain with `*`. Rightmost is applied first, like matrix multiplication:

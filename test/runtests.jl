@@ -60,10 +60,10 @@ end
 @testset "Difference" begin
     mesh = G.with_gmsh() do
         plate = G.Box((0,0,0), (2,1,0.05))
-        holes = [
+        holes = (
             G.Pos(0.5,0.5,0.0) * G.Cylinder((0,0,0), (0,0,1), 0.1),
             G.Pos(1.5,0.5,0.0) * G.Cylinder((0,0,0), (0,0,1), 0.1),
-        ]
+        )
         geom = plate - holes
         G.mesh(size_min=0.05, size_max=0.1)
     end

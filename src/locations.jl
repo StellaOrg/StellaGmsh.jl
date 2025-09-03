@@ -18,7 +18,7 @@ end
 
 function Pos(p::VecOrTup{<:Number})
     @argcheck length(p) == 3 "Position must be a 3D point"
-    Pos(p...)
+    Pos(p[1], p[2], p[3])
 end
 
 function Pos(; x::Number=0.0, y::Number=0.0, z::Number=0.0)
@@ -34,7 +34,6 @@ end
 
 function Rot(x::Union{Nothing, VecOrTup{<:Number}}, ax::VecOrTup{<:Number}, angle::Number)
     @argcheck length(ax) == 3 "Rotation axis must be a 3D vector"
-
     if isnothing(x)
         return Rot(
             nothing,
@@ -143,7 +142,7 @@ function Base.:*(a::Pos, b::AbstractGeometry)
 end
 
 
-function Base.:*(a::Location, b::AbstractVector{<:AbstractGeometry})
+function Base.:*(a::Location, b::VecOrTup{<:AbstractGeometry})
     updated = similar(b)
     for i in eachindex(b)
         updated[i] = a * b[i]
@@ -152,7 +151,7 @@ function Base.:*(a::Location, b::AbstractVector{<:AbstractGeometry})
 end
 
 
-function Base.:*(a::LocationSequence, b::AbstractVector{<:AbstractGeometry})
+function Base.:*(a::LocationSequence, b::VecOrTup{<:AbstractGeometry})
     length(a.locations) > 0 || return b
 
     op = a.locations[end]
