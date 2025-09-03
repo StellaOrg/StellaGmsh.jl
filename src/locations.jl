@@ -6,10 +6,23 @@ struct LocationSequence{L <: Tuple{Vararg{Location}}}
 end
 
 
-@kwdef struct Pos <: Location
-    x::Float64 = 0.0
-    y::Float64 = 0.0
-    z::Float64 = 0.0
+struct Pos <: Location
+    x::Float64
+    y::Float64
+    z::Float64
+end
+
+function Pos(x::Number, y::Number=0.0, z::Number=0.0)
+    Pos(Float64(x), Float64(y), Float64(z))
+end
+
+function Pos(p::VecOrTup{<:Number})
+    @argcheck length(p) == 3 "Position must be a 3D point"
+    Pos(p...)
+end
+
+function Pos(; x::Number=0.0, y::Number=0.0, z::Number=0.0)
+    Pos(Float64(x), Float64(y), Float64(z))
 end
 
 
@@ -19,8 +32,40 @@ struct Rot{X <: Union{Nothing, NTuple{3, Float64}}} <: Location
     angle::Float64
 end
 
-function Rot(ax::NTuple{3, Float64}, angle::Float64)
-    Rot(nothing, ax, angle)
+function Rot(x::Union{Nothing, VecOrTup{<:Number}}, ax::VecOrTup{<:Number}, angle::Number)
+    @argcheck length(ax) == 3 "Rotation axis must be a 3D vector"
+
+    if isnothing(x)
+        return Rot(
+            nothing,
+            (Float64(ax[1]), Float64(ax[2]), Float64(ax[3])),
+            Float64(angle),
+        )
+    end
+
+    @argcheck length(x) == 3 "Rotation point must be a 3D point"
+    Rot(
+        (Float64(x[1]), Float64(x[2]), Float64(x[3])),
+        (Float64(ax[1]), Float64(ax[2]), Float64(ax[3])),
+        Float64(angle),
+    )
+end
+
+function Rot(ax::VecOrTup{<:Number}, angle::Number)
+    @argcheck length(ax) == 3 "Rotation axis must be a 3D vector"
+    Rot(
+        nothing,
+        (Float64(ax[1]), Float64(ax[2]), Float64(ax[3])),
+        Float64(angle),
+    )
+end
+
+function Rot(;
+    x::Union{Nothing, VecOrTup{<:Number}}=nothing,
+    ax::VecOrTup{<:Number},
+    angle::Number,
+)
+    Rot(x, ax, angle)
 end
 
 
@@ -98,7 +143,7 @@ function Base.:*(a::Pos, b::AbstractGeometry)
 end
 
 
-function Base.:*(a::Location, b::AbstractVector{AbstractGeometry})
+function Base.:*(a::Location, b::AbstractVector{<:AbstractGeometry})
     updated = similar(b)
     for i in eachindex(b)
         updated[i] = a * b[i]
@@ -107,7 +152,7 @@ function Base.:*(a::Location, b::AbstractVector{AbstractGeometry})
 end
 
 
-function Base.:*(a::LocationSequence, b::AbstractVector{AbstractGeometry})
+function Base.:*(a::LocationSequence, b::AbstractVector{<:AbstractGeometry})
     length(a.locations) > 0 || return b
 
     op = a.locations[end]

@@ -136,8 +136,8 @@ new_geoms = trans * geoms
 Use standard Julia operators. Operations accept single geometries or vectors and return new wrapper objects centred at their OCC centre of mass.
 
 ```julia
-fused        = a + b
-cut          = a - b
+fused = a + b
+cut = a - b
 
 copied = copy(a)
 ```
@@ -158,7 +158,7 @@ G.with_gmsh() do
         G.Pos(1.5,0.5,0.0) * G.Cylinder((0,0,0), (0,0,1), 0.1),
     ]
     geom = plate - holes
-    G.mesh( size_min=0.05, size_max=0.1)
+    G.mesh(size_min=0.05, size_max=0.1)
     G.plot()
 end
 ```
