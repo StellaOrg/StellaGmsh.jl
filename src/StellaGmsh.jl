@@ -104,7 +104,9 @@ function with_gmsh(
 )
 
     # If user provides argv, prepend the program name to match intended behavior
-    !isempty(argv) && append!(["gmsh"], argv)
+    if !isempty(argv) 
+        argv = append!(["gmsh"], argv)
+    end
 
     gmsh.initialize(argv, read_config_files, run)
     gmsh.model.add(model_name)
