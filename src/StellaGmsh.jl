@@ -78,6 +78,18 @@ mesh = G.with_gmsh() do
     # Return mesh from `do` block
     mesh
 end
+
+Forward GMSH-specific arguments (see [here](https://gmsh.info/doc/texinfo/#Gmsh-command_002dline-interface)), 
+such as suppressing non-error output:
+
+```julia
+import StellaGmsh as G
+
+# -v 0 sets verbosity to 0: silent except for fatal errors
+mesh = G.with_gmsh(argv=["-v", "0"]) do
+    G.Box((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))
+    G.mesh()
+end
 ```
 
 Geometry-geometry operations include `+` for fusing geometries, `-` for subtracting (cutting),
@@ -90,6 +102,9 @@ function with_gmsh(
     run=false,
     model_name="StellaGmshModel",
 )
+
+    # If user provides argv, prepend the program name to match intended behavior
+    !isempty(argv) && append!(["gmsh"], argv)
 
     gmsh.initialize(argv, read_config_files, run)
     gmsh.model.add(model_name)
